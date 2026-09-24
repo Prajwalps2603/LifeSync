@@ -40,6 +40,7 @@ const STUB_USERS: (UserProfile & { password: string })[] = [
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<void>;
+  loginAsGuest: () => Promise<void>;
   loginWithGoogle: () => Promise<void>;
   logout: () => void;
   signUp: (email: string, password: string, displayName: string) => Promise<void>;
@@ -92,6 +93,21 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const profile: UserProfile = { ...user, lastLoginAt: new Date().toISOString() };
     localStorage.setItem(SESSION_KEY, JSON.stringify(profile));
     setAuthState({ user: profile, isLoading: false, isAuthenticated: true });
+  };
+
+  // ── Guest Login ───────────────────────────────────────────────────────────
+  const loginAsGuest = async (): Promise<void> => {
+    const guestUser: UserProfile = {
+      uid: 'guest-001',
+      email: 'guest@lifesync.app',
+      displayName: 'Guest User',
+      role: 'guest',
+      createdAt: new Date().toISOString(),
+      lastLoginAt: new Date().toISOString(),
+      isActive: true,
+    };
+    localStorage.setItem(SESSION_KEY, JSON.stringify(guestUser));
+    setAuthState({ user: guestUser, isLoading: false, isAuthenticated: true });
   };
 
   // ── Google Sign-In (stub — Firebase will replace) ─────────────────────────
@@ -156,6 +172,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     <AuthContext.Provider value={{
       ...authState,
       login,
+      loginAsGuest,
       loginWithGoogle,
       logout,
       signUp,

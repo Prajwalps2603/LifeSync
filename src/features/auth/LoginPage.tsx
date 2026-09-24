@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Mail, Lock, User, Eye, EyeOff, AlertCircle, Sparkles } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, AlertCircle, Sparkles, UserCheck } from 'lucide-react';
 
 type AuthMode = 'login' | 'signup';
 
 export const LoginPage: React.FC = () => {
-  const { login, signUp, loginWithGoogle } = useAuth();
+  const { login, signUp, loginWithGoogle, loginAsGuest } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as any)?.from?.pathname || '/';
@@ -51,17 +51,18 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  // Quick fill for demo credentials
-  const fillDemo = (role: 'admin' | 'user' | 'guest') => {
-    const creds = {
-      admin: { email: 'admin@lifesync.app', password: 'admin123' },
-      user:  { email: 'prajwal@lifesync.app', password: 'user123' },
-      guest: { email: 'guest@lifesync.app', password: 'guest123' },
-    };
-    setEmail(creds[role].email);
-    setPassword(creds[role].password);
-    setMode('login');
+  // Guest login handler
+  const handleGuestLogin = async () => {
     setError('');
+    setIsLoading(true);
+    try {
+      await loginAsGuest();
+      navigate(from, { replace: true });
+    } catch (err: any) {
+      setError(err.message || 'Failed to sign in as guest.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -203,20 +204,20 @@ export const LoginPage: React.FC = () => {
           </button>
         </p>
 
-        {/* Demo credentials */}
-        <div className="auth-demo">
-          <p className="auth-demo-title">Demo credentials</p>
-          <div className="auth-demo-pills">
-            <button className="auth-demo-pill auth-demo-admin" onClick={() => fillDemo('admin')}>
-              👑 Admin
-            </button>
-            <button className="auth-demo-pill auth-demo-user" onClick={() => fillDemo('user')}>
-              👤 User
-            </button>
-            <button className="auth-demo-pill auth-demo-guest" onClick={() => fillDemo('guest')}>
-              👁️ Guest
-            </button>
+        {/* Guest Login */}
+        <div className="auth-guest-wrapper">
+          <div className="auth-guest-divider">
+            <span />
           </div>
+          <button
+            type="button"
+            className="auth-btn-guest"
+            onClick={handleGuestLogin}
+            disabled={isLoading}
+          >
+            <UserCheck size={16} />
+            <span>Login as Guest</span>
+          </button>
         </div>
       </div>
 

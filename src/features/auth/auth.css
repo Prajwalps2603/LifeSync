@@ -141,22 +141,47 @@
 .auth-toggle-btn { background: none; border: none; color: #818cf8; cursor: pointer; font-weight: 600; font-size: 13px; }
 .auth-toggle-btn:hover { color: #a5b4fc; }
 
-/* Demo credentials */
-.auth-demo {
-  margin-top: 20px; padding: 14px;
-  background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+/* Guest Login */
+.auth-guest-wrapper {
+  margin-top: 18px;
+}
+.auth-guest-divider {
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.auth-guest-divider span {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.07);
+}
+.auth-btn-guest {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
+  color: #94a3b8;
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.auth-demo-title { font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; }
-.auth-demo-pills { display: flex; gap: 8px; flex-wrap: wrap; }
-.auth-demo-pill {
-  padding: 6px 14px; border: none; border-radius: 20px;
-  font-size: 12px; font-weight: 600; cursor: pointer; transition: transform 0.15s, opacity 0.15s;
+.auth-btn-guest:hover:not(:disabled) {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: rgba(99, 102, 241, 0.35);
+  color: #e2e8f0;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.15);
 }
-.auth-demo-pill:hover { transform: translateY(-1px); opacity: 0.9; }
-.auth-demo-admin { background: rgba(245,158,11,0.15); color: #fbbf24; border: 1px solid rgba(245,158,11,0.25); }
-.auth-demo-user  { background: rgba(99,102,241,0.15);  color: #818cf8; border: 1px solid rgba(99,102,241,0.25); }
-.auth-demo-guest { background: rgba(100,116,139,0.15); color: #94a3b8; border: 1px solid rgba(100,116,139,0.25); }
+.auth-btn-guest:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 
 /* Footer */
 .auth-footer {
