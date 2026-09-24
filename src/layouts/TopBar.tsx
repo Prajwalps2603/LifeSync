@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import {
   Search, Bell,
   Command
@@ -12,6 +13,7 @@ export const TopBar: React.FC = () => {
     openSearch,
     toggleNotifications, unreadNotificationsCount
   } = useApp();
+  const { user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -91,9 +93,13 @@ export const TopBar: React.FC = () => {
         <button
           className="topbar-avatar-btn"
           onClick={() => navigate('/profile')}
-          title="View Profile"
+          title={user?.displayName ? `${user.displayName} (Profile)` : 'View Profile'}
         >
-          <span>PN</span>
+          <span>
+            {user?.displayName
+              ? user.displayName.split(' ').map(n => n[0]).join('').slice(0, 2).toUpperCase()
+              : 'U'}
+          </span>
         </button>
       </div>
     </header>
