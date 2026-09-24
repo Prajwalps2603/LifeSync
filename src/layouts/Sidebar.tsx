@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
+import { useAuth } from '../context/AuthContext';
 import { store } from '../services';
 import { WorkspacePage, Task } from '../types';
 import {
   Home, Sun, FileText, Database, LayoutTemplate,
   CheckSquare, Layers, Target, Repeat, Bookmark, Calendar as CalIcon,
-  DollarSign, BarChart3, Settings,
+  DollarSign, BarChart3, Settings, Shield, LogOut,
   ChevronDown, ChevronRight, X, BrainCircuit,
   PanelLeftClose, PanelLeftOpen
 } from 'lucide-react';
@@ -41,9 +42,16 @@ const LifeSyncIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
 
 export const Sidebar: React.FC = () => {
   const { isSidebarOpen, toggleSidebar } = useApp();
+  const { user, logout, hasRole } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isWorkspaceExpanded, setIsWorkspaceExpanded] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   const pages: WorkspacePage[] = store.pages;
 
@@ -215,12 +223,26 @@ export const Sidebar: React.FC = () => {
             {!collapsed && <span>Memories</span>}
           </NavLink>
 
-          {/* INSIGHTS */}
+          {/* INTELLIGENCE */}
           {!collapsed && <div className="sidebar-section-title">Intelligence</div>}
           <NavLink to="/insights" className={navItemClass('/insights')} title="Insights">
             <BarChart3 size={17} />
             {!collapsed && <span>Insights</span>}
           </NavLink>
+
+          {/* ADMIN — only visible to admins */}
+          {hasRole('admin') && (
+            <>
+              {!collapsed && <div className="sidebar-section-title">Administration</div>}
+              <NavLink to="/admin" className={navItemClass('/admin')} title="Admin Panel">
+                <Shield size={17} color="#f59e0b" />
+                {!collapsed && <span style={{ color: '#f59e0b', fontWeight: 600 }}>Admin Panel</span>}
+                {!collapsed && (
+                  <span className="badge" style={{ marginLeft: 'auto', fontSize: 10, background: 'rgba(245,158,11,0.15)', color: '#fbbf24', border: '1px solid rgba(245,158,11,0.25)' }}>Admin</span>
+                )}
+              </NavLink>
+            </>
+          )}
         </nav>
 
         {/* Footer & User Profile */}
@@ -230,17 +252,29 @@ export const Sidebar: React.FC = () => {
             {!collapsed && <span>Settings</span>}
           </NavLink>
 
+          {/* User card */}
           <NavLink to="/profile" className={`sidebar-user-card ${collapsed ? 'sidebar-user-card-collapsed' : ''}`} title="Profile">
             <div className="sidebar-user-avatar">
-              <span>PN</span>
+              <span>{user?.displayName?.[0]?.toUpperCase() ?? 'U'}</span>
             </div>
             {!collapsed && (
               <div className="sidebar-user-info">
-                <div className="sidebar-user-name">Prajwal Nair</div>
-                <div className="sidebar-user-sub">Personal Space</div>
+                <div className="sidebar-user-name">{user?.displayName ?? 'User'}</div>
+                <div className="sidebar-user-sub" style={{ textTransform: 'capitalize' }}>{user?.role ?? 'user'}</div>
               </div>
             )}
           </NavLink>
+
+          {/* Logout button */}
+          <button
+            className={navItemClass('/logout')}
+            onClick={handleLogout}
+            title="Logout"
+            style={{ width: '100%', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.4)', marginTop: 4 }}
+          >
+            <LogOut size={16} />
+            {!collapsed && <span>Logout</span>}
+          </button>
         </div>
       </aside>
     </>

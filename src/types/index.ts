@@ -1,3 +1,59 @@
+// ─── Auth & RBAC Types ────────────────────────────────────────────────────────
+
+export type UserRole = 'admin' | 'user' | 'guest';
+
+export interface UserProfile {
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL?: string;
+  role: UserRole;
+  createdAt: string;
+  lastLoginAt: string;
+  isActive: boolean;
+}
+
+export interface AuthState {
+  user: UserProfile | null;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+}
+
+// ─── Role Permissions ─────────────────────────────────────────────────────────
+
+export const ROLE_PERMISSIONS: Record<UserRole, {
+  canWrite: boolean;
+  canDelete: boolean;
+  accessibleRoutes: string[];
+  canViewAdminPanel: boolean;
+}> = {
+  admin: {
+    canWrite: true,
+    canDelete: true,
+    canViewAdminPanel: true,
+    accessibleRoutes: ['*'], // all routes
+  },
+  user: {
+    canWrite: true,
+    canDelete: true,
+    canViewAdminPanel: false,
+    accessibleRoutes: [
+      '/', '/my-day', '/ai', '/tasks', '/projects', '/goals',
+      '/habits', '/notes', '/calendar', '/expenses', '/memories',
+      '/insights', '/settings', '/profile',
+      '/workspace', '/workspace/pages', '/workspace/databases', '/workspace/templates',
+    ],
+  },
+  guest: {
+    canWrite: false,
+    canDelete: false,
+    canViewAdminPanel: false,
+    accessibleRoutes: ['/', '/notes', '/insights'],
+  },
+};
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 export type Priority = 'low' | 'medium' | 'high' | 'urgent';
 
 export type TaskStatus = 'todo' | 'in_progress' | 'waiting' | 'completed';
