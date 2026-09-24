@@ -11,6 +11,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "@tiptap/extension-blockquote": "^3.30.5",
     "@tiptap/extension-character-count": "^3.30.5",
     "@tiptap/extension-code-block": "^3.30.5",

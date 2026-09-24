@@ -250,7 +250,7 @@ class ServerStore {
   // --- AI Insights & Messages ---
   getInsights = () => this.insights;
   getMessages = () => this.chatMessages;
-  sendMessage = (userText: string) => {
+  sendMessage = (userText: string, customAiText?: string) => {
     const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
     const userMsg: ChatMessage = {
       id: `msg-${Date.now()}`,
@@ -259,9 +259,11 @@ class ServerStore {
       timestamp: now
     };
 
-    let replyText = "I've analyzed your request and cross-referenced your active goals and calendar.";
+    let replyText = customAiText || "I've analyzed your request and cross-referenced your active goals and calendar.";
     let cards: ChatMessage['cards'] = undefined;
     let references: ChatMessage['references'] = undefined;
+
+    if (!customAiText) {
 
     const lower = userText.toLowerCase();
     if (lower.includes('plan') || lower.includes('day') || lower.includes('morning')) {
@@ -312,6 +314,7 @@ class ServerStore {
       ];
     } else {
       replyText = `Understood! I've connected this with your Career Development project and saved relevant preferences to your memory bank.`;
+    }
     }
 
     const aiMsg: ChatMessage = {

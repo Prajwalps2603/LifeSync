@@ -49,7 +49,7 @@ interface FeatureFlag {
 
 const INITIAL_FLAGS: FeatureFlag[] = [
   { key: 'ai_companion', label: 'AI Companion', description: 'Enable the AI chat assistant for all users', enabled: true, icon: <Cpu size={15} /> },
-  { key: 'rag_search', label: 'RAG / Smart Search', description: 'Enable Gemini-powered contextual search over user data', enabled: false, icon: <Globe size={15} /> },
+  { key: 'rag_search', label: 'RAG / Smart Search', description: 'Enable Gemini-powered contextual search over user data', enabled: true, icon: <Globe size={15} /> },
   { key: 'guest_access', label: 'Guest Access', description: 'Allow guest users to browse limited pages', enabled: true, icon: <Lock size={15} /> },
   { key: 'new_signup', label: 'New Sign-Ups', description: 'Allow new users to create accounts', enabled: true, icon: <Users size={15} /> },
   { key: 'expenses_module', label: 'Expenses Module', description: 'Enable the expenses tracking feature', enabled: true, icon: <Database size={15} /> },
@@ -298,7 +298,7 @@ export const AdminPanel: React.FC = () => {
               { key: 'Express', value: '5.x (Port 5000)' },
               { key: 'Firebase', value: 'Standby — set FIREBASE_ENABLED=true to connect' },
               { key: 'Auth Method', value: 'Stub (Firebase Auth ready)' },
-              { key: 'RAG Engine', value: 'Gemini API (not connected yet)' },
+              { key: 'RAG Engine', value: 'Gemini 1.5 Flash (RAG Context Injection Ready)' },
             ].map(item => (
               <div key={item.key} className="admin-env-row">
                 <span className="admin-env-key">{item.key}</span>

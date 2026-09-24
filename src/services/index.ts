@@ -95,8 +95,8 @@ store.hydrate();
 // ─── Task Service ────────────────────────────────────────────────────────────
 
 export const taskService = {
-  getTasks: async (): Promise<Task[]> => apiFetch('/api/tasks'),
-  getTaskById: async (id: string): Promise<Task | undefined> => apiFetch(`/api/tasks/${id}`).catch(() => undefined),
+  getTasks: async (): Promise<Task[]> => apiFetch<Task[]>('/api/tasks'),
+  getTaskById: async (id: string): Promise<Task | undefined> => apiFetch<Task>(`/api/tasks/${id}`).catch(() => undefined),
 
   createTask: async (task: Omit<Task, 'id'>): Promise<Task> => {
     const created = await apiFetch<Task>('/api/tasks', {

@@ -15,6 +15,7 @@ import { pagesRouter } from './routes/pagesRouter';
 import { databasesRouter } from './routes/databasesRouter';
 import { aiRouter } from './routes/aiRouter';
 import { notificationsRouter } from './routes/notificationsRouter';
+import { initGemini } from './services/ragService';
 
 dotenv.config();
 
@@ -101,5 +102,9 @@ app.listen(PORT, async () => {
   await initFirebase();
   const fbStatus = getFirebaseStatus();
   console.log(`🔥 Firebase:     ${fbStatus.message}`);
+
+  // Initialize Gemini AI (RAG Engine)
+  const geminiOk = initGemini();
+  console.log(`✨ RAG Engine:   ${geminiOk ? 'Gemini 1.5 Flash (Active)' : 'Context-Aware LifeSync RAG Engine (Fallback)'}`);
   console.log('='.repeat(55));
 });
